@@ -5,3 +5,6 @@ include
 lib
 
 settings.json
+
+
+__pycache__
