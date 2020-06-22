@@ -1,6 +1,6 @@
 BASE_API_PREFIX = '/resume/api'
 
-DEV_HOST = 'localhost'
+DEV_HOST = '0.0.0.0'
 DEV_PORT = '5000'
 DEV_DEBUG = True
 

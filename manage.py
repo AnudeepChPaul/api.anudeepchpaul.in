@@ -6,7 +6,7 @@ import src.configurations as config
 application = app
 
 if __name__ == '__main__':
-    init_db_connection()
+    """ init_db_connection() """
     application.run(
         host=config.DEV_HOST,
         port=config.DEV_PORT,
