@@ -7,8 +7,6 @@ application = app
 
 if __name__ == '__main__':
     """ init_db_connection() """
-    application.run(
-        host=config.DEV_HOST,
-        port=config.DEV_PORT,
-        debug=config.DEV_DEBUG
-    )
+    """ host=config.DEV_HOST,
+        port=config.DEV_PORT, """
+    application.run(debug=config.DEV_DEBUG)
