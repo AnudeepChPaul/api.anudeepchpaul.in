@@ -1,67 +1,26 @@
-from rethinkdb import RethinkDB
+# from rethinkdb import RethinkDB
 import src.configurations as config
-
-r = RethinkDB()
-
-conn = None
-
-HOST = config.DB_HOST
-PORT = config.DB_PORT
-DB = config.DB_ROOT_NAME
-
-tables = dict({
-    'app': ('app', 'name'),
-    'skills': ('skills', 'skill_name')
-})
+import pymongo
+from bson import json_util, ObjectId
+import json
 
 
-def create_db():
-    try:
-        r.db_create(DB).run(conn)
-        print('Database with name="{DB}" created'.format(DB=DB))
-    except:
-        print('Database with name="{DB}" exists'.format(DB=DB))
+class Database(object):
+    def __init__(self, collection_name):
+        self.client = pymongo.MongoClient(config.MONGO_DB_CONNECTION_URL)
+        self.db_name = config.DB_ROOT_NAME
+        self.collection_name = collection_name
+        self.collection = self.client[self.db_name][self.collection_name]
 
+    def set_collection(self):
+        pass
 
-def create_tables():
-    for table_name, primary in tables.values():
-        try:
-            query = r.db(DB).table_create(table_name, primary_key=primary)
-            query.run(conn)
-
-            print('Table with name="{table_name}" created'.format(
-                table_name=table_name))
-        except:
-            print('Table with name="{table_name}" exists'.format(
-                table_name=table_name))
-
-
-def connect_db():
-    global conn
-    try:
-        conn = r.connect(host=HOST, port=PORT)
-        print('db connected!')
-    except:
-        print('Not able to connect to db!')
-
-
-def initialize_db():
-    create_db()
-    create_tables()
-
-
-def destroy_db():
-    pass
-
-
-def destroy_tables():
-    pass
-
-
-
-def init_db_connection():
-    connect_db()
-    initialize_db()
+    def find(self):
+        results = list()
+        for res in self.collection.find():
+            # results.append(res)
+            results.append(json.loads(json_util.dumps(res)))
+        return results
 
 
 print('db/__init__ loaded')

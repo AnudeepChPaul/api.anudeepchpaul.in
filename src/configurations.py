@@ -7,3 +7,6 @@ DEV_DEBUG = True
 DB_HOST = '127.0.0.1'
 DB_PORT = 28015
 DB_ROOT_NAME = 'resume'
+
+
+MONGO_DB_CONNECTION_URL = "mongodb+srv://acpaul:Anudeep.1206@cluster0.hajzu.gcp.mongodb.net/resume?retryWrites=true&w=majority"
