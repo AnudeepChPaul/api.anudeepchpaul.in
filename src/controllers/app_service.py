@@ -1,5 +1,5 @@
 from flask import Blueprint
-from src.db.resume import get_app_data
+from src.db.application import get_app_data
 
 app_service = Blueprint('app_service', __name__, url_prefix='/resume/api/app_service')
 

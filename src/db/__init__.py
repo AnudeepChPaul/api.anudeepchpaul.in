@@ -22,5 +22,9 @@ class Database(object):
             results.append(json.loads(json_util.dumps(res)))
         return results
 
+    def save(self, object):
+        result = self.collection.insert(object)
+        return json_util.dumps(result)
+
 
 print('db/__init__ loaded')
