@@ -40,11 +40,22 @@ def after_request(res):
         'service_name': request.blueprint,
         'time': datetime.now(),
         'mode': mode
-    }   
+    }
     p = Process(target=post_url_hits, args=(LOG,))
     p.start()
     print('before_request executed!')
     return res
 
 
+# @app.route("/stream")
+# def stream():
+#     def eventStream():
+#         while True:
+#             time.sleep(5)
+#             yield "data: {}\n\n".format('somedata')
+
+#     return Response(eventStream(), mimetype="text/event-stream")
+
+
 controllers.initiate_routes(app)
+controllers.configure_collections()

@@ -6,5 +6,6 @@ lib
 
 settings.json
 
+.idea
 
 __pycache__
