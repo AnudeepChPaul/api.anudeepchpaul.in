@@ -1,11 +1,11 @@
-from src.db import Database
+from src.db import DBConnection
 import json
 from datetime import datetime
 from flask import request
 
 
 def post_performance_logs(request):
-    performance = Database('performance')
+    performance = DBConnection('performance')
 
     log = {
         'browser': request.user_agent.browser,
@@ -30,6 +30,6 @@ def post_url_hits(log):
     #     'time': datetime.now(),
     #     'mode': 'None'
     # }
-    performance = Database('history')
+    performance = DBConnection('history')
     performance.save(log)
     print('log posted!')

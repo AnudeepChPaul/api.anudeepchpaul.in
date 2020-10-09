@@ -4,7 +4,7 @@ import pymongo
 from bson import json_util
 from pymongo.errors import DuplicateKeyError
 
-from src.db import Database
+from src.db import DBConnection
 
 WORK_TYPES = {
     'TODO': 'TODO',
@@ -14,20 +14,29 @@ WORK_TYPES = {
 
 
 def configure_tasks():
-    tasks = Database('tasks')
-    tasks.collection.create_index([ ("taskId", pymongo.ASCENDING) ], unique=True)
+    tasks = DBConnection('tasks')
+    tasks.collection.create_indexes([ pymongo.IndexModel([ ("taskId", pymongo.ASCENDING) ], unique=True) ])
 
 
-def get_all_tasks():
-    tasks = Database('tasks')
+def get_all_tasks(page=0, page_size=20):
+    tasks = DBConnection('tasks')
+
+    all_tasks = tasks.find_by_page({ }, page=int(page), page_size=int(page_size))
 
     return {
-        'tasks': tasks.find()
+        'tasks': all_tasks[ 0 ],
+        'pageData': {
+            'start': all_tasks[ 1 ],
+            'end': all_tasks[ 2 ],
+            'page': page,
+            'size': page_size,
+            'total': all_tasks[ 3 ]
+        }
     }
 
 
 def new_task(task):
-    tasks = Database('tasks')
+    tasks = DBConnection('tasks')
 
     try:
         return {
@@ -42,7 +51,7 @@ def new_task(task):
 
 
 def update_task(task):
-    db = Database('tasks')
+    db = DBConnection('tasks')
 
     WORK_PROGRESS_WORKFLOW = [
         WORK_TYPES.get('TODO'),
@@ -71,7 +80,7 @@ def update_task(task):
 
 
 def delete_selected_tasks(tasks):
-    db = Database('tasks')
+    db = DBConnection('tasks')
 
     # try:
     db.delete_all(tasks, 'taskId')

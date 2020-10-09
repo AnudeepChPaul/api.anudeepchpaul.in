@@ -1,34 +1,18 @@
-from src.db import Database
-import json
-from flask import jsonify
-
-
-def get_skills():
-    skills = Database('skills')
-
-    return {
-        'skills': {
-            'list': skills.find()
-        }
-    }, 200
+from src.db import DBConnection
 
 
 def get_experiences():
-    experiences = Database('experiences')
+    experiences = DBConnection('experiences')
     return {
-        'experiences': {
-            'list': experiences.find()
-        }
+        'experiences': experiences.find()
     }
 
 
 def get_app_data():
-    application = Database('application')
-    links = Database('links')
+    application = DBConnection('application')
+    links = DBConnection('links')
 
     return {
-        'title': application.find()[0],
-        'header': {
-            'list': links.find(),
-        }
-    }, 200
+        'title': application.find()[ 0 ],
+        'header': links.find()
+    }

@@ -1,28 +1,32 @@
-from flask import Flask, Blueprint, request
-from src.db.tasks import get_all_tasks, new_task, update_task, configure_tasks, delete_selected_tasks
-from bson import json_util
-import json
+from flask import Blueprint, request
+
+from src.controllers.auth_service import requires_super_admin
+from src.db.task import configure_tasks, delete_selected_tasks, get_all_tasks, new_task, update_task
 
 task_service = Blueprint('task_service', __name__,
                          url_prefix='/resume/api/task_service')
 
 
-@task_service.route('/all', methods=['GET'])
+@task_service.route('/get_tasks', methods=[ 'GET' ])
+@requires_super_admin
 def get_tasks():
-    return get_all_tasks()
+    return get_all_tasks(page=request.args.get('page'), page_size=request.args.get('pageSize'))
 
 
-@task_service.route('/new', methods=['POST'])
+@task_service.route('/new', methods=[ 'POST' ])
+@requires_super_admin
 def save_new_task():
     return new_task(request.json)
 
 
-@task_service.route('/update', methods=['PUT'])
+@task_service.route('/update', methods=[ 'PUT' ])
+@requires_super_admin
 def update_existing_task():
     return update_task(request.json)
 
 
-@task_service.route('/delete', methods=['DELETE'])
+@task_service.route('/delete', methods=[ 'DELETE' ])
+@requires_super_admin
 def delete_all_tasks():
     taskIds = request.args.get('taskIds', None)
 
@@ -32,5 +36,5 @@ def delete_all_tasks():
         return delete_selected_tasks(None)
 
 
-def configure_task_service():
+def configure_tasks_table():
     configure_tasks()
