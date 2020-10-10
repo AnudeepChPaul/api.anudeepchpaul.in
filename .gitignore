@@ -11,3 +11,11 @@ settings.json
 __pycache__
 
 .env
+
+venv/
+
+.vscode/
+
+rethinkdb_data
+
+env/
