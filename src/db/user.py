@@ -1,6 +1,7 @@
 import pymongo
 
 from src.db import DBConnection
+from src.models.user import User
 
 
 class WrongPasswordError(ValueError):
@@ -17,12 +18,12 @@ class UserNotFound(ValueError):
 
 def configure_users_table():
     users = DBConnection('users')
-    users.collection.create_indexes([ pymongo.IndexModel([ ("username", pymongo.TEXT) ], unique=True) ])
+    users.collection.create_indexes([pymongo.IndexModel([("username", pymongo.TEXT)], unique=True)])
 
 
 def get_user_by_username(username, n=None):
     db = DBConnection('users')
-    user = db.find({ 'username': username })
+    user = db.find({'username': username})
 
     if not len(user):
         raise UserNotFound()
@@ -30,4 +31,9 @@ def get_user_by_username(username, n=None):
     if n is None:
         return user
     else:
-        return user[ int(n) ]
+        return user[int(n)]
+
+
+def save_user(user):
+    db = DBConnection('users')
+    User.load_from_json(db.update(user.to_json(), user.get_key()))

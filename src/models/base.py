@@ -1,4 +1,5 @@
 class BaseModel(object):
+
     def get(self, prop):
         return self[prop]
 
@@ -6,9 +7,13 @@ class BaseModel(object):
         return True
 
     @staticmethod
+    def get_key():
+        return None
+
+    @staticmethod
     def load_from_string():
         pass
 
     @staticmethod
-    def load_from_json():
+    def load_from_json(data):
         pass
