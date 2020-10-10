@@ -1,0 +1,47 @@
+version: "3.4"
+
+services:
+  mymongo:
+    image: mongo
+    container_name: dash_db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: achandrapaul_dev
+      MONGO_INITDB_ROOT_PASSWORD: 123456789
+      MONGO_INITDB_DATABASE: resume
+    volumes:
+      - type: volume
+        source: data
+        target: /data/db
+    ports:
+      - 27017:27017
+      - 28017:28017
+    healthcheck:
+      test: "exit 0"
+
+  dash_api:
+    container_name: dash_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+      - 5678:5678
+    env_file:
+      - .env
+    depends_on:
+      - mymongo
+    environment:
+      INITDB_ROOT_USERNAME: achandrapaul_dev
+      INITDB_ROOT_PASSWORD: 123456789
+      DB_HOST: mymongo
+      DB_PORT: 27017
+      INITDB_DATABASE: admin
+
+#  db:
+#    image: rethinkdb:2.4.1-buster-slim
+#    container_name: dash_db
+#    volumes:
+#    - .:/data
+
+volumes:
+  data:

@@ -27,4 +27,4 @@ def save_app_configuration():
 
 
 def configure_app_service():
-    configure_application_config_table();
+    configure_application_config_table()

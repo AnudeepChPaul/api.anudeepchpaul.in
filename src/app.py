@@ -1,7 +1,8 @@
 import json
 import random
+import os
 
-import gevent
+# import gevent
 from flask import Flask, Response
 from flask_cors import CORS
 
@@ -45,7 +46,7 @@ def root():
     return ''
 
 
-if config.bool('DEBUG_MODE'):
+if os.environ.get('DEBUG_MODE', False):
     @app.route('/config')
     def get_config():
         return {
@@ -60,11 +61,12 @@ def event_stream():
         event_data = {
             'notifications': 25
         }
-        event_type = [ 'info', 'error', 'skills', 'experience' ][ random.randint(0, 3) ]
+        event_type = ['info', 'error', 'skills',
+                      'experience'][random.randint(0, 3)]
         event_id = random.randint(100000000000, 9999999999999)
 
         yield 'id: {}\nevent: {}\ndata: {}\n\n'.format(event_id, event_type, json.dumps(event_data))
-        gevent.sleep(0.5)
+        # gevent.sleep(0.5)
 
 #
 # @app.route("/stream/<string:stream_id>")
