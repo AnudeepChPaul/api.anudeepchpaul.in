@@ -30,6 +30,8 @@ services:
       - .env
     depends_on:
       - mymongo
+    links:
+      - mymongo
     environment:
       INITDB_ROOT_USERNAME: achandrapaul_dev
       INITDB_ROOT_PASSWORD: 123456789
