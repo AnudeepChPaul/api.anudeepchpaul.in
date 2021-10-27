@@ -9,17 +9,27 @@ def get_technologies():
     }
 
 
-def insert_technologies(skills):
+def insert_technology(skill):
     techDb = DBConnection('technologies')
 
-    for skill in skills:
-        # if skill.get('_id', None):
-        #     skill.pop('_id')
-
-        techDb.update(skill, 'techId')
+    techDb.update(skill, 'techId')
 
     return {
-        'technologies': techDb.find()
+        'technologies': techDb.find({
+            'techId': skill.get('techId', None)
+        })
+    }
+
+
+def update_technology(skill):
+    techDb = DBConnection('technologies')
+
+    techDb.update(skill, 'techId')
+
+    return {
+        'technologies': techDb.find({
+            'techId': skill.get('techId', None)
+        })
     }
 
 
@@ -29,5 +39,5 @@ def remove_technologies(skills):
     techDb.delete_all(skills, 'techId')
 
     return {
-        'technologies': [ ]
+        'technologies': []
     }

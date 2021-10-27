@@ -64,11 +64,10 @@ def validate_token():
 def if_super_admin_token():
     payload = get_token_auth_header().decode_token()
 
-    if payload.get('origin') != request.origin or \
-            payload.get('is_secure') != request.is_secure or \
+    if payload.get('is_secure') != request.is_secure or \
             payload.get('username') != request.headers.get('X-User-Name', None) or \
             payload.get('client_ip') != get_client_ip() or \
-            payload.get('role') == 'SUPER_ADMIN':
+            payload.get('role') != 'SUPER_ADMIN':
         raise AuthError('HEADERS_MISSING')
 
     return True

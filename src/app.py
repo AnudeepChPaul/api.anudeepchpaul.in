@@ -4,7 +4,7 @@ import os
 
 # import gevent
 from flask import Flask, Response
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 from src import controllers
 from src.controllers.auth_service import AuthError
@@ -13,7 +13,7 @@ from src.configurations import config
 
 app = Flask(__name__)
 
-CORS(app)
+CORS(app, resources={r"*": {"origins": "http://localhost:1841/"}})
 
 
 # @app.after_request
@@ -53,6 +53,12 @@ if os.environ.get('DEBUG_MODE', False):
             'debug': config.bool('DEBUG_MODE'),
             'db_root': config.str('DB_ROOT_NAME'),
             'mongo_url': config.str('MONGO_DB_CONNECTION_URL')
+        }
+
+    @app.route('/site-map')
+    def list_routes():
+        return {
+            'routes': ['%s' % rule for rule in app.url_map.iter_rules()]
         }
 
 

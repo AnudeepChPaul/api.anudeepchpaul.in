@@ -15,22 +15,22 @@ WORK_TYPES = {
 
 def configure_tasks():
     tasks = DBConnection('tasks')
-    tasks.collection.create_indexes([ pymongo.IndexModel([ ("taskId", pymongo.ASCENDING) ], unique=True) ])
+    tasks.collection.create_indexes([pymongo.IndexModel([("taskId", pymongo.ASCENDING)], unique=True)])
 
 
 def get_all_tasks(page=0, page_size=20):
     tasks = DBConnection('tasks')
 
-    all_tasks = tasks.find_by_page({ }, page=int(page), page_size=int(page_size))
+    all_tasks = tasks.find_by_page({}, page=int(page), page_size=int(page_size))
 
     return {
-        'tasks': all_tasks[ 0 ],
+        'tasks': all_tasks[0],
         'pageData': {
-            'start': all_tasks[ 1 ],
-            'end': all_tasks[ 2 ],
+            'start': all_tasks[1],
+            'end': all_tasks[2],
             'page': page,
             'size': page_size,
-            'total': all_tasks[ 3 ]
+            'total': all_tasks[3]
         }
     }
 
@@ -40,12 +40,12 @@ def new_task(task):
 
     try:
         return {
-            'tasks': [ tasks.save(task) ],
-            'error': [ ]
+            'tasks': [tasks.save(task)],
+            'error': []
         }
     except DuplicateKeyError as error:
         return {
-            'tasks': [ json.loads(json_util.dumps(task)) ],
+            'tasks': [json.loads(json_util.dumps(task))],
             'error': error.args
         }
 
@@ -69,13 +69,13 @@ def update_task(task):
         pass
     finally:
         if workflow_direction == 'NEXT' and workflow_index != len(WORK_PROGRESS_WORKFLOW):
-            task[ 'type' ] = WORK_PROGRESS_WORKFLOW[ workflow_index + 1 ]
+            task['type'] = WORK_PROGRESS_WORKFLOW[workflow_index + 1]
 
         if workflow_direction == 'PREV' and workflow_index != 0:
-            task[ 'type' ] = WORK_PROGRESS_WORKFLOW[ workflow_index - 1 ]
+            task['type'] = WORK_PROGRESS_WORKFLOW[workflow_index - 1]
 
     return {
-        'tasks': [ db.update(task, 'title') ]
+        'tasks': [db.update(task, 'title')]
     }
 
 
@@ -86,5 +86,5 @@ def delete_selected_tasks(tasks):
     db.delete_all(tasks, 'taskId')
     # finally:
     return {
-        'tasks': [ ]
+        'tasks': []
     }

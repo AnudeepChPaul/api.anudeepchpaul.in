@@ -9,14 +9,27 @@ def get_projects():
     }
 
 
-def insert_projects(projects):
+def insert_projects(project):
     project_db = DBConnection('projects')
 
-    for project in projects:
-        project_db.update(project, 'projectId')
+    project_db.update(project, 'projectId')
 
     return {
-        'projects': project_db.find()
+        'projects': project_db.find({
+            'projectId': project.get('projectId', None)
+        })
+    }
+
+
+def update_projects(project):
+    project_db = DBConnection('projects')
+
+    project_db.update(project, 'projectId')
+
+    return {
+        'projects': project_db.find({
+            'projectId': project.get('projectId', None)
+        })
     }
 
 
